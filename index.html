@@ -15,16 +15,24 @@
             <div class="container">
                 <h1>Users</h1>
 
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Select view by
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                      <button class="dropdown-item" type="button" onclick="displayUsers()">name</button>
-                      <button class="dropdown-item" type="button" onclick="displayUsers('username')">username</button>
-                      <button class="dropdown-item" type="button" onclick="displayUsers('email')">email</button>
+                <div class="input-group mb-3">
+                    <input id="inputQuery" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                      <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button> -->
+                      <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Select by
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                          <button class="dropdown-item" type="button" onclick="filterList()">name</button>
+                          <button class="dropdown-item" type="button" onclick="filterList('username')">username</button>
+                          <button class="dropdown-item" type="button" onclick="filterList('email')">email</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                
 
                 <ul id="usersList" class="list-group list-group-flush">
                     <li class="list-group-item">An item</li>
@@ -44,11 +52,26 @@
             // Ex1) Get and display, using an asynchronous pattern, the users from: https://jsonplaceholder.typicode.com/users 
             let usersDataArr = []
             const usersList = document.getElementById('usersList')
+            const input = document.getElementById('inputQuery')
 
+            const filterList = (q = 'name') => {
+                let query = input.value
+                if (query.length > 0){
+                    let filteredList = usersDataArr.filter(user => user[q].includes(query))
+                    console.log(filteredList)
+
+                    usersList.innerHTML = ''
+                    filteredList.forEach(user => {
+                        usersList.innerHTML += `<li class="list-group-item">${user[q]}</li>`
+                    });
+
+                } else {
+                    displayUsers(q)
+                }
+            }
             const displayUsers = (q = 'name') => {
                 usersList.innerHTML = ''
                     usersDataArr.forEach(user => {
-                        // console.log(user.q)
                         usersList.innerHTML += `<li class="list-group-item">${user[q]}</li>`
                     });
             }
